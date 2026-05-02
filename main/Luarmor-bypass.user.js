@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Luarmor - Demon Bypass
 // @namespace    http://tampermonkey.net/
-// @version      1.2
-// @description  Bypass luarmor support all 
+// @version      1.4
+// @description  only support linkvertise
 // @author       Made by Jova
 // @match        https://ads.luarmor.net/*
 // @match        https://linkvertise.com/*
@@ -19,26 +19,76 @@
     const API_KEY = "demon_704b65703b4618318f08bfccd82eac0d";
     const API_URL = "https://demonbypass.c5.lol/api/bypass?apikey=" + API_KEY + "&url=";
 
-    // --- 1. CSS UI Overlay ---
+    // --- 1. Ultra Premium CSS UI ---
     GM_addStyle(`
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;500&display=swap');
+
         #custom-bypass-ui {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(15, 15, 25, 0.98); color: white;
-            z-index: 999999; display: flex; flex-direction: column;
-            align-items: center; justify-content: center; font-family: sans-serif;
+            background: radial-gradient(circle at center, rgba(15, 15, 35, 0.95), rgba(5, 5, 15, 1));
+            backdrop-filter: blur(15px);
+            color: white; z-index: 999999;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            font-family: 'Poppins', sans-serif;
+            animation: fadeIn 0.8s ease;
         }
-        .loader-box {
-            text-align: center; padding: 30px; border-radius: 15px;
-            background: #1e1e2e; border: 1px solid #3e3e5e; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+
+        .main-container {
+            position: relative; text-align: center;
+            padding: 50px; border-radius: 30px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 40px rgba(0, 209, 255, 0.2);
+            overflow: hidden;
         }
-        .spinner {
-            border: 4px solid #f3f3f3; border-top: 4px solid #3498db;
-            border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
+
+        /* Border Animasi Berputar */
+        .main-container::before {
+            content: ""; position: absolute; top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: conic-gradient(transparent, #00d1ff, transparent, #ff4757, transparent);
+            animation: rotateBorder 4s linear infinite;
+            z-index: -1;
         }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .status-text { font-size: 1.2rem; margin-bottom: 10px; color: #00d1ff; }
-        .timer { font-size: 2rem; margin-top: 10px; color: #ff4757; }
+        .main-container::after {
+            content: ""; position: absolute; inset: 4px;
+            background: #0f0f1e; border-radius: 26px; z-index: -1;
+        }
+
+        .spinner-v2 {
+            width: 90px; height: 90px; margin-bottom: 25px;
+            border: 5px solid rgba(255, 255, 255, 0.1);
+            border-top: 5px solid #00d1ff;
+            border-right: 5px solid #ff4757;
+            border-radius: 50%;
+            animation: spin 1s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
+        }
+
+        .status-msg {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem; letter-spacing: 2px; margin-bottom: 10px;
+            text-transform: uppercase; color: #fff;
+            text-shadow: 0 0 10px rgba(0, 209, 255, 0.8);
+        }
+
+        .timer-v2 {
+            font-size: 3.5rem; font-weight: 700; color: #ff4757;
+            text-shadow: 0 0 20px rgba(255, 71, 87, 0.6);
+        }
+
+        .jova-badge {
+            margin-top: 35px; padding: 8px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 209, 255, 0.3);
+            border-radius: 50px; font-size: 0.8rem;
+            color: #00d1ff; letter-spacing: 3px;
+            box-shadow: 0 0 15px rgba(0, 209, 255, 0.2);
+        }
+
+        @keyframes rotateBorder { 100% { transform: rotate(360deg); } }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     `);
 
     function createUI() {
@@ -46,10 +96,11 @@
         const ui = document.createElement('div');
         ui.id = 'custom-bypass-ui';
         ui.innerHTML = `
-            <div class="loader-box">
-                <div class="spinner"></div>
-                <div class="status-text" id="status-msg">Bypassing Linkvertise...</div>
-                <div id="countdown-timer" class="timer"></div>
+            <div class="main-container">
+                <center><div class="spinner-v2"></div></center>
+                <div class="status-msg" id="status-msg">System Loading...</div>
+                <div id="countdown-timer" class="timer-v2">--</div>
+                <div class="jova-badge">MADE BY JOVA</div>
             </div>
         `;
         document.body.appendChild(ui);
@@ -68,11 +119,16 @@
             method: "GET",
             url: API_URL + encodeURIComponent(currentUrl),
             onload: function(response) {
-                const data = JSON.parse(response.responseText);
-                if (data.status === "success") {
-                    startCountdown(data.result);
-                } else {
-                    document.getElementById('status-msg').innerText = "Bypass Failed";
+                try {
+                    const data = JSON.parse(response.responseText);
+                    if (data.status === "success") {
+                        startCountdown(data.result);
+                    } else {
+                        document.getElementById('status-msg').innerText = "FAILED";
+                        document.getElementById('status-msg').style.color = "#ff4757";
+                    }
+                } catch(e) {
+                    document.getElementById('status-msg').innerText = "ERROR";
                 }
             }
         });
@@ -81,7 +137,8 @@
     function startCountdown(targetUrl) {
         let timeLeft = 10;
         const timerEl = document.getElementById('countdown-timer');
-        document.getElementById('status-msg').innerText = "Redirecting in...";
+        document.getElementById('status-msg').innerText = "Bypassed!";
+        
         const interval = setInterval(() => {
             timerEl.innerText = timeLeft + "s";
             if (timeLeft-- <= 0) {
