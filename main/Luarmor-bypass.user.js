@@ -1,9 +1,9 @@
 // ==UserScript==
-// @name         Luarmor & Linkvertise Auto Bypass
+// @name         Luarmor - Demon Bypass
 // @namespace    http://tampermonkey.net/
 // @version      1.2
-// @description  Automate Luarmor checkpoints and bypass Linkvertise with elegant UI
-// @author       Partner Coding
+// @description  Bypass luarmor support all 
+// @author       Made by Jova
 // @match        https://ads.luarmor.net/*
 // @match        https://linkvertise.com/*
 // @grant        GM_xmlhttpRequest
