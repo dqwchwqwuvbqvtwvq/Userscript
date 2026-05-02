@@ -19,7 +19,6 @@
     const API_KEY = "demon_704b65703b4618318f08bfccd82eac0d";
     const API_URL = "https://demonbypass.c5.lol/api/bypass?apikey=" + API_KEY + "&url=";
 
-    // --- 1. Ultra Premium CSS UI ---
     GM_addStyle(`
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;500&display=swap');
 
