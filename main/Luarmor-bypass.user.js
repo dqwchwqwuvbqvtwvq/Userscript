@@ -99,7 +99,7 @@
                 <center><div class="spinner-v2"></div></center>
                 <div class="status-msg" id="status-msg">System Loading...</div>
                 <div id="countdown-timer" class="timer-v2">--</div>
-                <div class="jova-badge">MADE BY JOVA</div>
+                <div class="jova-badge">MADE BY Jova X Zamx</div>
             </div>
         `;
         document.body.appendChild(ui);
