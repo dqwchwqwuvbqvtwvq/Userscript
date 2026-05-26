@@ -16,8 +16,7 @@
 (function() {
     'use strict';
 
-    const API_KEY = "demon_704b65703b4618318f08bfccd82eac0d";
-    const API_URL = "https://demonbypass.c5.lol/api/bypass?apikey=" + API_KEY + "&url=";
+    const API_URL = "https://demonbypass.c5.lol/api/bypass?url=";
 
     GM_addStyle(`
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;500&display=swap');
@@ -137,7 +136,7 @@
         let timeLeft = 10;
         const timerEl = document.getElementById('countdown-timer');
         document.getElementById('status-msg').innerText = "Bypassed!";
-        
+
         const interval = setInterval(() => {
             timerEl.innerText = timeLeft + "s";
             if (timeLeft-- <= 0) {
