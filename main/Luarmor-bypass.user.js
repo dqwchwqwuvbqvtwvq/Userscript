@@ -16,7 +16,7 @@
 (function() {
     'use strict';
 
-    const API_URL = "https://demonbypass.c5.lol/api/bypass?url=";
+    const API_URL = "https://demonbypass.vercel.app/api/bypass?url=";
 
     GM_addStyle(`
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;500&display=swap');
