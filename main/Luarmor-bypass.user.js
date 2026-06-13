@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Luarmor - Demon Bypass
 // @namespace    http://tampermonkey.net/
-// @version      1.4
+// @version      1.5
 // @description  only support linkvertise
 // @author       Made by Jova
 // @match        https://ads.luarmor.net/*
@@ -9,6 +9,7 @@
 // @grant        GM_xmlhttpRequest
 // @grant        GM_addStyle
 // @connect      demonbypass.vercel.app
+// @connect      demonbypass.c5.lol
 // @updateURL    https://github.com/dqwchwqwuvbqvtwvq/Userscript/raw/refs/heads/main/main/Luarmor-bypass.user.js
 // @downloadURL  https://github.com/dqwchwqwuvbqvtwvq/Userscript/raw/refs/heads/main/main/Luarmor-bypass.user.js
 // ==/UserScript==
@@ -41,7 +42,6 @@
             overflow: hidden;
         }
 
-        /* Border Animasi Berputar */
         .main-container::before {
             content: ""; position: absolute; top: -50%; left: -50%;
             width: 200%; height: 200%;
@@ -116,26 +116,45 @@
         GM_xmlhttpRequest({
             method: "GET",
             url: API_URL + encodeURIComponent(currentUrl),
+            timeout: 10000, // Tambahan batas waktu maksimal 10 detik
             onload: function(response) {
                 try {
                     const data = JSON.parse(response.responseText);
                     if (data.status === "success") {
                         startCountdown(data.result);
                     } else {
-                        document.getElementById('status-msg').innerText = "FAILED";
-                        document.getElementById('status-msg').style.color = "#ff4757";
+                        showError("FAILED");
                     }
                 } catch(e) {
-                    document.getElementById('status-msg').innerText = "ERROR";
+                    showError("BAD RESPONSE");
                 }
+            },
+            onerror: function() {
+                showError("NET ERROR");
+            },
+            ontimeout: function() {
+                showError("TIMEOUT");
             }
         });
+    }
+
+    function showError(msg) {
+        const statusEl = document.getElementById('status-msg');
+        const timerEl = document.getElementById('countdown-timer');
+        if (statusEl) {
+            statusEl.innerText = msg;
+            statusEl.style.color = "#ff4757";
+        }
+        if (timerEl) {
+            timerEl.innerText = "ERR";
+        }
     }
 
     function startCountdown(targetUrl) {
         let timeLeft = 10;
         const timerEl = document.getElementById('countdown-timer');
         document.getElementById('status-msg').innerText = "Bypassed!";
+        document.getElementById('status-msg').style.color = "#00d1ff";
 
         const interval = setInterval(() => {
             timerEl.innerText = timeLeft + "s";
