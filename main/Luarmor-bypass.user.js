@@ -8,7 +8,7 @@
 // @match        https://linkvertise.com/*
 // @grant        GM_xmlhttpRequest
 // @grant        GM_addStyle
-// @connect      demonbypass.c5.lol
+// @connect      demonbypass.vercel.app
 // @updateURL    https://github.com/dqwchwqwuvbqvtwvq/Userscript/raw/refs/heads/main/main/Luarmor-bypass.user.js
 // @downloadURL  https://github.com/dqwchwqwuvbqvtwvq/Userscript/raw/refs/heads/main/main/Luarmor-bypass.user.js
 // ==/UserScript==
